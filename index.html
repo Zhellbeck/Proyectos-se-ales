@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,90 +8,385 @@
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/vendor/normalize.css">
     <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        canvas {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
 </head>
+
 <body>
+
     <section class="lateral">
 
         <div class="perfil">
             <figure class="perfil__circulo">
-                <img src="img/zed1.jpg" alt="" class="perfil__foto">
+                <img src="img/colombia.jpg" alt="" class="perfil__foto">
             </figure>
-            <h1 class="perfil__nombres">Zed</h1>
+            <h1 class="perfil__nombres">COVID-19 en Colombia, Usa, China e Italia</h1>
         </div>
         <div class="informacion">
-            <h2 class="informacion__titulo">Master of shadows</h2>
-            <p class="informacion__descripcion">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cum obcaecati tempora fuga quidem quasi consequatur, beatae, sit iste assumenda repellat molestias nemo! Officiis voluptatibus reprehenderit adipisci expedita. Ipsam, earum commodi!</p>
-
+            <h2 class="informacion__titulo">Estadisticas</h2>
             <ul class="habilidades">
-                <li class="habilidad">html5</li>
-                <li class="habilidad">python</li>
-                <li class="habilidad">django</li>
-                <li class="habilidad">css3</li>
+                <li class="habilidad">casos totales</li>
+                <p>7973</p>
+                <li class="habilidad">recuperados</li>
+                <p>1807</p>
+                <li class="habilidad">fallecidos</li>
+                <p>358</p>
+                <li class="habilidad"><a class="link"
+                        href="https://news.google.com/covid19/map?hl=es-419&gl=US&ceid=US%3Aes-419&mid=%2Fm%2F01ls2">Acá
+                        más información</a></li>
+
             </ul>
+            <h2 class="informacion__titulo">¿Qué es el Covid?</h2>
+            <p class="informacion__descripcion">La COVID‑19 es la enfermedad infecciosa causada por el coronavirus que
+                se ha descubierto más recientemente. Tanto este nuevo virus como la enfermedad que provoca eran
+                desconocidos antes de que estallara el brote en Wuhan (China) en diciembre de 2019. Actualmente la
+                COVID‑19 es una pandemia que afecta a muchos países de todo el mundo.</p>
         </div>
     </section>
     <section class="proyectos">
         <div class="row">
-        <article class="proyecto">
-            <img src="img/zed3.jpg" alt="" class="proyecto__imagen">
+            <article class="proyecto">
+                <div style="width: 400px; height: 400px;">
+                    <canvas id="myChart" width="400" height="400"></canvas>
+                </div>
+                <script>
+                    // Set up our HTTP request
+                    let xhr = new XMLHttpRequest();
+                    mlabels = []
+                    mdata = []
+                    // Setup our listener to process completed requests
+                    xhr.onload = function () {
 
-            <h3 class="proyecto__titulo">Proyecto 1</h3>
 
-            <p class="proyecto__descripcion">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque, odit adipisci suscipit ab accusantium rerum expedita inventore amet dolor officiis ea repellendus recusandae sequi laudantium voluptates? Architecto vel laudantium vitae!</p>
+                        // Process our return data
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            console.log(xhr.responseText)
+                            // What do when the request is successful
 
-            <ul class="habilidades">
-                <li class="habilidad--proyecto">html5</li>
-                <li class="habilidad--proyecto">python</li>
-                <li class="habilidad--proyecto">django</li>
-                <li class="habilidad--proyecto">css3</li>
-            </ul>
-        </article>
+                            console.log('success!', xhr);
 
-        <article class="proyecto">
-            <img src="img/zed2.jpg" alt="" class="proyecto__imagen">
+                            JSON.parse(xhr.responseText).forEach(function (data, index) {
 
-            <h3 class="proyecto__titulo">Proyecto 1</h3>
 
-            <p class="proyecto__descripcion">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque, odit adipisci suscipit ab accusantium rerum expedita inventore amet dolor officiis ea repellendus recusandae sequi laudantium voluptates? Architecto vel laudantium vitae!</p>
+                                mlabels.push(
+                                    `${new Date(data.Date).getDate()}-${new Date(data.Date).getMonth()}-${new Date(data.Date).getFullYear()}`
+                                    
 
-            <ul class="habilidades">
-                <li class="habilidad--proyecto">html5</li>
-                <li class="habilidad--proyecto">python</li>
-                <li class="habilidad--proyecto">django</li>
-                <li class="habilidad--proyecto">css3</li>
-            </ul>
-        </article>
-    </div>
-    <div class="row">
-        <article class="proyecto">
-            <img src="img/zed2.jpg" alt="" class="proyecto__imagen">
 
-            <h3 class="proyecto__titulo">Proyecto 1</h3>
+                                )
+                                mdata.push({
 
-            <p class="proyecto__descripcion">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque, odit adipisci suscipit ab accusantium rerum expedita inventore amet dolor officiis ea repellendus recusandae sequi laudantium voluptates? Architecto vel laudantium vitae!</p>
+                                    y: data.Active
 
-            <ul class="habilidades">
-                <li class="habilidad--proyecto">html5</li>
-                <li class="habilidad--proyecto">python</li>
-                <li class="habilidad--proyecto">django</li>
-                <li class="habilidad--proyecto">css3</li>
-        </article>
+                                })
 
-        <article class="proyecto">
-            <img src="img/zed2.jpg" alt="" class="proyecto__imagen">
+                            });
+                        } else {
+                            // What do when the request fails
+                            console.log('The request failed!');
+                        }
 
-            <h3 class="proyecto__titulo">Proyecto 1</h3>
+                        // Code that should run regardless of the request status
+                        console.log('This always runs...');
+                        console.log(mlabels)
+                        console.log(mdata)
 
-            <p class="proyecto__descripcion">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque, odit adipisci suscipit ab accusantium rerum expedita inventore amet dolor officiis ea repellendus recusandae sequi laudantium voluptates? Architecto vel laudantium vitae!</p>
+                        var ctx = document.getElementById('myChart').getContext('2d');
 
-            <ul class="habilidades">
-                <li class="habilidad--proyecto">html5</li>
-                <li class="habilidad--proyecto">python</li>
-                <li class="habilidad--proyecto">django</li>
-                <li class="habilidad--proyecto">css3</li>
-            </ul>
-        </article>
-    </div>
+                   
+
+                        var chart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: mlabels,
+                                datasets: [
+                                    {
+                                        borderColor: '#af90ca',
+                                        backgroundColor: '#00e5ff',
+                                        data: mdata,
+                                        label: 'Infectados Covid-19 Colombia',
+                                    }
+                                ]
+                            },
+                        });
+
+                    };
+
+                    // Create and send a GET request
+                    // The first argument is the post type (GET, POST, PUT, DELETE, etc.)
+                    // The second argument is the endpoint URL
+                    xhr.open('GET', 'https://api.covid19api.com/dayone/country/colombia');
+                    xhr.send();
+
+
+                </script>
+                <h3 class="proyecto__titulo"><a href="https://news.google.com/covid19/map?hl=es-419&gl=US&ceid=US%3Aes-419&mid=%2Fm%2F01ls2">Infectados en Colombia</a></h3>
+
+                <p class="proyecto__descripcion">En la gráfica se puden evidenciar los casos de Covid-19 en Colombia y cómo su gráfica muestra un crecimiento exponencial con el pasar del tiempo</p>
+
+                
+            </article>
+
+            <article class="proyecto">
+                
+                <div style="width: 400px; height: 400px;">
+                    <canvas id="myChart2" width="400" height="400"></canvas>
+                </div>
+                <script>
+                    // Set up our HTTP request
+                    let xhr1 = new XMLHttpRequest();
+                    mlabels1 = []
+                    mdata2 = []
+                    // Setup our listener to process completed requests
+                    xhr1.onload = function () {
+
+
+                        // Process our return data
+                        if (xhr1.status >= 200 && xhr1.status < 300) {
+                            console.log(xhr1.responseText)
+                            // What do when the request is successful
+
+                            console.log('success!', xhr1);
+
+                            JSON.parse(xhr1.responseText).forEach(function (data, index) {
+
+
+                                mlabels1.push(
+                                    `${new Date(data.Date).getDate()}-${new Date(data.Date).getMonth()}-${new Date(data.Date).getFullYear()}`
+                                    
+
+
+                                )
+                                mdata2.push({
+
+                                    y: data.Active
+
+                                })
+
+                            });
+                        } else {
+                            // What do when the request fails
+                            console.log('The request failed!');
+                        }
+
+                        // Code that should run regardless of the request status
+                        console.log('This always runs...');
+                        console.log(mlabels1)
+                        console.log(mdata2)
+
+                        var ctx = document.getElementById('myChart2').getContext('2d');
+
+                       
+
+                        var chart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: mlabels1,
+                                datasets: [
+                                    {
+                                        borderColor: '#af90ca',
+                                        backgroundColor: '#33691e',
+                                        data: mdata2,
+                                        label: 'Infectados Covid-19 China',
+                                    }
+                                ]
+                            },
+                        });
+
+                    };
+
+                    // Create and send a GET request
+                    // The first argument is the post type (GET, POST, PUT, DELETE, etc.)
+                    // The second argument is the endpoint URL
+                    xhr1.open('GET', 'https://api.covid19api.com/dayone/country/china');
+                    xhr1.send();
+
+
+                </script>
+                
+                <h3 class="proyecto__titulo"><a href="https://news.google.com/covid19/map?hl=es-419&gl=US&ceid=US%3Aes-419&mid=%2Fm%2F0d05w3">Infectados China</a></h3>
+
+                <p class="proyecto__descripcion">En la gráfica se puden evidenciar los casos de Covid-19 en China y cómo su gráfica muestra un descenso en las muertes después de cumplir con todas las normas de cuarentena implementadas.</p>
+
+                
+            </article>
+        </div>
+        <div class="row">
+            <article class="proyecto">
+    
+                <div style="width: 400px; height: 400px;">
+                    <canvas id="myChart3" width="400" height="400"></canvas>
+                </div>
+                <script>
+                    // Set up our HTTP request
+                    let xhr2 = new XMLHttpRequest();
+                    mlabels2 = []
+                    mdata3 = []
+                    // Setup our listener to process completed requests
+                    xhr2.onload = function () {
+
+
+                        // Process our return data
+                        if (xhr2.status >= 200 && xhr2.status < 300) {
+                            console.log(xhr2.responseText)
+                            // What do when the request is successful
+
+                            console.log('success!', xhr2);
+
+                            JSON.parse(xhr2.responseText).forEach(function (data, index) {
+
+
+                                mlabels2.push(
+                                    `${new Date(data.Date).getDate()}-${new Date(data.Date).getMonth()}-${new Date(data.Date).getFullYear()}`
+                                    
+
+
+                                )
+                                mdata3.push({
+
+                                    y: data.Active
+
+                                })
+
+                            });
+                        } else {
+                            // What do when the request fails
+                            console.log('The request failed!');
+                        }
+
+                        // Code that should run regardless of the request status
+                        console.log('This always runs...');
+                        console.log(mlabels2)
+                        console.log(mdata3)
+
+                        var ctx = document.getElementById('myChart3').getContext('2d');
+
+
+                        var chart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: mlabels2,
+                                datasets: [
+                                    {
+                                        borderColor: '#e64a19',
+                                        backgroundColor: '#00e5ff',
+                                        data: mdata3,
+                                        label: 'Infectados Covid-19 Estados Unidos de América',
+                                    }
+                                ]
+                            },
+                        });
+
+                    };
+
+                    // Create and send a GET request
+                    // The first argument is the post type (GET, POST, PUT, DELETE, etc.)
+                    // The second argument is the endpoint URL
+                    xhr2.open('GET', 'https://api.covid19api.com/dayone/country/united-states');
+                    xhr2.send();
+
+
+                </script>
+                <h3 class="proyecto__titulo"><a href="https://news.google.com/covid19/map?hl=es-419&gl=US&ceid=US%3Aes-419&mid=%2Fm%2F09c7w0">Infectados USA Actualmente</a></h3>
+
+                <p class="proyecto__descripcion">En la gráfica se puden evidenciar los casos de Covid-19 en Estados Unidos y cómo su gráfica muestra un crecimiento exponencial con el pasar del tiempo debido a que su tardia reacción frente a una crisis global</p>
+
+              
+            </article>
+
+            <article class="proyecto">
+                
+                <div style="width: 400px; height: 400px;">
+                    <canvas id="myChart4" width="400" height="400"></canvas>
+                </div>
+                <script>
+                    // Set up our HTTP request
+                    let xhr3 = new XMLHttpRequest();
+                    mlabels3 = []
+                    mdata4 = []
+                    // Setup our listener to process completed requests
+                    xhr3.onload = function () {
+
+
+                        // Process our return data
+                        if (xhr3.status >= 200 && xhr3.status < 300) {
+                            console.log(xhr3.responseText)
+                            // What do when the request is successful
+
+                            console.log('success!', xhr3);
+
+                            JSON.parse(xhr3.responseText).forEach(function (data, index) {
+
+
+                                mlabels3.push(
+                                    `${new Date(data.Date).getDate()}-${new Date(data.Date).getMonth()}-${new Date(data.Date).getFullYear()}`
+                                    
+
+
+                                )
+                                mdata4.push({
+
+                                    y: data.Active
+
+                                })
+
+                            });
+                        } else {
+                            // What do when the request fails
+                            console.log('The request failed!');
+                        }
+
+                        // Code that should run regardless of the request status
+                        console.log('This always runs...');
+                        console.log(mlabels3)
+                        console.log(mdata4)
+
+                        var ctx = document.getElementById('myChart4').getContext('2d');
+
+
+                        var chart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: mlabels3,
+                                datasets: [
+                                    {
+                                        borderColor: '#ff1744',
+                                        backgroundColor: '#ff1744',
+                                        data: mdata4,
+                                        label: 'Infectados Covid-19 Italia',
+                                    }
+                                ]
+                            },
+                        });
+
+                    };
+
+                    // Create and send a GET request
+                    // The first argument is the post type (GET, POST, PUT, DELETE, etc.)
+                    // The second argument is the endpoint URL
+                    xhr3.open('GET', 'https://api.covid19api.com/dayone/country/italy');
+                    xhr3.send();
+
+
+                </script>
+
+                <h3 class="proyecto__titulo"><a href="https://news.google.com/covid19/map?hl=es-419&gl=US&ceid=US%3Aes-419&mid=%2Fm%2F03rjj">Infectados Italia Actualmente</a></h3>
+
+                <p class="proyecto__descripcion">Italia registra 29.029 fallecimientos con coronavirus, con 195 las últimas 24 horas, una cifra algo superior a los 174 del domingo, que fue la más baja desde el inicio del confinamiento el 10 de marzo. La curva de contagios sigue descendiendo y desde ayer se han registrado 1.221 nuevos casos hasta un total de 211.958 desde que se detectó el virus el 21 de febrero, según los datos ofrecidos este lunes (04.05.2020) por Protección Civil. Los positivos actuales son 99.980, con una reducción de 199 desde el domingo. En tres regiones del país, Umbria, Basilicata y Molise, no se ha registrado ningún caso nuevo el último día. Italia inició este mismo lunes la "fase 2" de la emergencia por el coronavirus con la reanudación de parte de la actividad económica -la industria, manufacturas, construcción y comercio mayorista - y el alivio de algunas restricciones de movimiento para las personas, después de más de ocho semanas de confinamiento. (EFE)</p>
+
+               
+            </article>
+        </div>
     </section>
+
+
 </body>
+
 </html>
